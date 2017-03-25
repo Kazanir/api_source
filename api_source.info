@@ -1,0 +1,10 @@
+name = API Class Mazes
+description = Exposes the source code of API class members.
+core = 7.x
+package = API
+
+dependencies[] = api
+dependencies[] = views_megarow
+
+files[] = views/api_source_handler_field_megarow_links.inc
+

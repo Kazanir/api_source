@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * Implements hook_views_api().
+ */
+function api_source_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'api_source') . '/views',
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function api_source_menu() {
+  $items['api/source/%/%'] = array(
+    'title' => 'Source Code',
+    'page callback' => 'api_source_megarow_callback',
+    'page arguments' => array(2, 3),
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+/**
+ * Print the code for a given documentation member.
+ */
+function api_source_megarow_callback($did, $type) {
+  $doc = api_object_load($did, NULL, $type);
+  // @TODO Add command to slide to top if errors.
+  $commands = array();
+  $commands[] = views_megarow_command_display(t('Source Code'), $doc->code, $did);
+
+  return array('#type' => 'ajax', '#commands' => $commands);
+}
+
+/**
+ * Implements hook_preprocess_views_view_table().
+ *
+ * This preprocess needs to run after the views one which defines 'row_classes'.
+ *
+ * Replacement for hard-coded entity stuff in views_megarow.
+ */
+function api_source_preprocess_views_view_table(&$vars) {
+  // Add the custom classes and attributes that identify each entity row.
+  if ($vars['view']->plugin_name == 'table_megarows') {
+    foreach ($vars['view']->result as $count => $row) {
+      $vars['row_classes'][$count][] = 'item-' . $row->api_documentation_api_members_did;
+    }
+  }
+}
+
