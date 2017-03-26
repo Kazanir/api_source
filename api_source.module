@@ -29,6 +29,18 @@ function api_source_menu() {
  */
 function api_source_megarow_callback($did, $type) {
   $doc = api_object_load($did, NULL, $type);
+  // We have the doc. Now for each of the self-members, we need to figure out
+  // the appropriate doc ID so that we can anchor-link it on the same page.
+  $output = preg_replace_callback('%(constant|function|property) member-of-self\">(\w+)</span>%i', function($matches) {
+    $prefix = ($matches[1] == 'property' ? '$' : '');
+    $return = $matches[1];
+    $return .= ' member-of-self"><a href="#member-row-' . $anchors[$prefix . $matches[2]];
+    // $return .= '" class="accordion-toggle" data-toggle="collapse" data-target="#collapse-1-';
+    // $return .= (isset($anchors[$prefix . $matches[2]]) ? $anchors[$prefix . $matches[2]] : $anchors[$matches[2]]);
+    $return .= '">' . $matches[2] . '</a></span>';
+
+    return $return;
+  }, $doc->code);
   // @TODO Add command to slide to top if errors.
   $commands = array();
   $commands[] = views_megarow_command_display(t('Source Code'), $doc->code, $did);

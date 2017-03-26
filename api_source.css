@@ -1,0 +1,20 @@
+.view-api-members .ctools-content {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.view-api-members td.views-field-views-megarow {
+  vertical-align: middle;
+  padding: 4px;
+}
+
+.view-api-members ul.api-source-button {
+  margin: auto;
+}
+
+.view-api-members ul.api-source-button li a {
+  background: url(/themes/bartik/images/add.png) no-repeat center center;
+  color: transparent;
+  margin: 10px 2px;
+}
+
